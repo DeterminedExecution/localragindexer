@@ -10,7 +10,9 @@ const server = Bun.serve({
       const { question, history, diagnostics } = await req.json();
       return Response.json(await answer(question, history ?? [], !!diagnostics));
     }
-    return new Response(Bun.file("index.html"));
+    return new Response(Bun.file("index.html"), {
+      headers: { "Content-Type": "text/html", "Cache-Control": "no-store" },
+    });
   },
 });
 
