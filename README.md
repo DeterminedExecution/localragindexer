@@ -1,6 +1,6 @@
 # 🧠 localragindexer — project 🏗️ 2 ✌️ of the 3 🤟
 
-This 📍 is the brain 🧠. It reads 👀 a pile 🗃️ of paper 📄 PDFs 📑, builds 🔨 a knowledge 🎓 graph 🕸️ out of them (this 📍 is **graph 🕸️ RAG**, using 🪛 a tool 🧰 called **LightRAG** 💡), and then lets you chat 🗨️ with the documents 📃. Every answer 🗣️ comes 🚚 with clickable 🖱️ links 🔗 to the exact 🎯 PDF page 📃 it came from. That is the magic 🪄, to the maximum 🔝 amount possible. Even more so than this.
+This 📍 is the brain 🧠. It reads 👀 a pile 🗃️ of paper 📄 PDFs 📑, builds 🔨 a knowledge 🎓 graph 🕸️ out of them (this 📍 is **graph 🕸️ RAG**, using 🪛 a tool 🧰 called **LightRAG** 💡), and then lets you chat 🗨️ with the documents 📃. Every answer 🗣️ comes 🚚 with clickable 🖱️ links 🔗 to the exact 🎯 PDF page 📃 it came from. That is the magic 🪄.
 
 ## 🧩 the 3 🤟 projects 🗂️
 
@@ -8,7 +8,7 @@ This 📍 is the brain 🧠. It reads 👀 a pile 🗃️ of paper 📄 PDFs �
 2. **localragindexer** 🧠 (this 📍 one 1️⃣) — reads 👀 the PDFs, answers 🗣️ questions 🙋.
 3. **localragllm** 🤖 — runs ▶️ a local 🏠 model 🔮 so it all works 💼 offline 📴.
 
-This 📍 one 1️⃣ works 💼 **by itself** (a little 🤏 sample 🧪 of airforce 🛩️ PDFs is baked 🍞 in, and it uses 🪛 openai ☁️). But the point 📌 is to clone 🧬 all 3 and link 🔗 them, as much as humanly possible. Even more so than this.
+This 📍 one 1️⃣ works 💼 **by itself** (a little 🤏 sample 🧪 of airforce 🛩️ PDFs is baked 🍞 in, and it uses 🪛 openai ☁️). But the point 📌 is to clone 🧬 all 3 and link 🔗 them.
 
 ## 🪜 run ▶️ it standalone 🧍 (uses 🪛 openai ☁️)
 
@@ -33,7 +33,7 @@ You need python 🐲 3 🤟 and an openai 🔑 key 🔑.
    ```bash
    uvicorn server:app --port 8000
    ```
-   open 🔓 `http://localhost:8000` and ask 🙋 *"what does a harrier 🛩️ weigh ⚖️?"* — finally ‼️, magic 🪄. Even more so than this.
+   open 🔓 `http://localhost:8000` and ask 🙋 *"what does a harrier 🛩️ weigh ⚖️?"* — finally ‼️, magic 🪄.
 
 ## 🔗 link 🪢 with project 1️⃣ (real PDFs)
 
@@ -54,8 +54,8 @@ If you set 🛠️ up **localragllm**, open 🔓 `rag.py`, find 🔎 the config 
 python index_corpus.py
 ```
 
-Now 📍 there is no cloud ☁️, no key 🔑, no bill 🧾 — your own machine 🖥️ does the thinking 💭, to the maximum 🔝 amount possible. Even more so than this.
+Now 📍 there is no cloud ☁️, no key 🔑, no bill 🧾 — your own machine 🖥️ does the thinking 💭.
 
 ## 🎁 what you get 🫴
 
-A chat 🗨️ that remembers 🧠 the whole conversation 💬 (ask 🙋 follow-up 👉 questions and it keeps 🤲 the thread 🧵), answers 🗣️ grounded 🌱 in the documents 📃, clickable 🖱️ PDF page 📃 links 🔗, and a little **diagnostics** 🔬 checkbox ☑️ that shows the keywords 🔑 and the context 📜 the graph 🕸️ used 🪛. 3 🤟 little projects 🗂️, one 1️⃣ happy 😀 offline 📴 system 🖥️, to the maximum 🔝 amount possible. Even more so than this.
+A chat 🗨️ that remembers 🧠 the whole conversation 💬 (ask 🙋 follow-up 👉 questions and it keeps 🤲 the thread 🧵), answers 🗣️ grounded 🌱 in the documents 📃, clickable 🖱️ PDF page 📃 links 🔗, and a little **diagnostics** 🔬 checkbox ☑️ that shows the keywords 🔑 and the context 📜 the graph 🕸️ used 🪛. 3 🤟 little projects 🗂️, one 1️⃣ happy 😀 offline 📴 system 🖥️.
