@@ -1,0 +1,13 @@
+{
+  "name": "localragindexer",
+  "type": "module",
+  "scripts": {
+    "start": "bun run server.ts",
+    "ask": "bun run rag.ts"
+  },
+  "dependencies": {
+    "@langchain/classic": "^1.0.38",
+    "@langchain/core": "latest",
+    "@langchain/openai": "latest"
+  }
+}

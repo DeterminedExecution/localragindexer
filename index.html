@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harrier RAG</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 3rem auto; padding: 0 1rem; line-height: 1.5; }
+  h1 { font-size: 1.4rem; }
+  h3 { font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; opacity: .55; margin: 1rem 0 .35rem; }
+  #chat { max-height: 58vh; overflow-y: auto; margin: 1rem 0; padding-right: .3rem; }
+  .msg { margin: 1rem 0; }
+  .msg .who { font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; opacity: .5; margin-bottom: .25rem; }
+  .msg .body { white-space: pre-wrap; padding: .7rem .9rem; border-radius: 10px; }
+  .msg.user .body { background: #8882; }
+  .msg.assistant .body { border: 1px solid #8884; }
+  form { display: flex; gap: .5rem; }
+  input[type=text] { flex: 1; padding: .6rem .8rem; font-size: 1rem; border: 1px solid #8888; border-radius: 8px; }
+  button { padding: .6rem 1.1rem; font-size: 1rem; border: 0; border-radius: 8px; cursor: pointer; }
+  .controls { display: flex; align-items: center; gap: 1rem; font-size: .9rem; opacity: .85; margin-top: .6rem; }
+  .controls label { display: flex; align-items: center; gap: .4rem; }
+  .controls #reset { background: none; border: 0; color: inherit; opacity: .6; cursor: pointer; padding: 0; text-decoration: underline; }
+  .msg ul { margin: .2rem 0; padding-left: 1.1rem; }
+  .msg a { word-break: break-all; }
+  .muted { opacity: .55; }
+  pre { white-space: pre-wrap; background: #8881; padding: .8rem; border-radius: 8px; font-size: .8rem; max-height: 300px; overflow: auto; }
+</style>
+</head>
+<body>
+  <h1>Harrier RAG</h1>
+  <p class="muted">Ask about the AV-8 / Harrier — follow-up questions keep the conversation's context.</p>
+
+  <div id="chat"></div>
+
+  <form id="f">
+    <input type="text" id="q" placeholder="What is the Harrier's empty weight?" autocomplete="off" autofocus>
+    <button>Ask</button>
+  </form>
+  <div class="controls">
+    <label><input type="checkbox" id="diag"> include diagnostics</label>
+    <button type="button" id="reset">New chat</button>
+  </div>
+
+<script>
+  const f = document.getElementById('f'), q = document.getElementById('q'), diag = document.getElementById('diag');
+  const chat = document.getElementById('chat'), reset = document.getElementById('reset');
+  const history = []; // [{role, content}] sent to the server each turn
+
+  function addMsg(role, text) {
+    const div = document.createElement('div');
+    div.className = 'msg ' + role;
+    const who = document.createElement('div'); who.className = 'who';
+    who.textContent = role === 'user' ? 'You' : 'Harrier RAG';
+    const body = document.createElement('div'); body.className = 'body'; body.textContent = text;
+    div.append(who, body);
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+    return { div, body };
+  }
+
+  function renderSources(parent, sources) {
+    if (!sources || !sources.length) return;
+    const h = document.createElement('h3'); h.textContent = 'Sources';
+    const ul = document.createElement('ul');
+    for (const s of sources) {
+      const li = document.createElement('li'), a = document.createElement('a');
+      a.href = s.url; a.target = '_blank'; a.rel = 'noopener';
+      a.textContent = `${s.doc_id} — p.${s.page}` + (s.title ? ` · ${s.title}` : '');
+      li.appendChild(a); ul.appendChild(li);
+    }
+    parent.append(h, ul);
+  }
+
+  function renderDiagnostics(parent, d) {
+    if (!d) return;
+    const block = (label, text) => {
+      const h = document.createElement('h3'); h.textContent = label;
+      const pre = document.createElement('pre'); pre.textContent = text;
+      parent.append(h, pre);
+    };
+    block('Words / phrases used for retrieval', d.query);
+    block('RAG context inserted into the prompt', d.context);
+  }
+
+  f.onsubmit = async (e) => {
+    e.preventDefault();
+    const question = q.value.trim();
+    if (!question) return;
+    q.value = '';
+    addMsg('user', question);
+    const prior = history.slice();          // turns before this question
+    history.push({ role: 'user', content: question });
+
+    const a = addMsg('assistant', 'Thinking…');
+    a.body.classList.add('muted');
+    try {
+      const r = await fetch('/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question, history: prior, diagnostics: diag.checked }),
+      });
+      const data = await r.json();
+      a.body.classList.remove('muted');
+      a.body.textContent = data.answer ?? ('Error: ' + JSON.stringify(data));
+      history.push({ role: 'assistant', content: data.answer ?? '' });
+      renderSources(a.div, data.sources);
+      renderDiagnostics(a.div, data.diagnostics);
+      chat.scrollTop = chat.scrollHeight;
+    } catch (err) { a.body.textContent = 'Error: ' + err; }
+  };
+
+  reset.onclick = () => { history.length = 0; chat.innerHTML = ''; q.focus(); };
+</script>
+</body>
+</html>
